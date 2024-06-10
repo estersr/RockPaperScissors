@@ -25,45 +25,71 @@ struct ContentView: View {
     
     
     var body: some View {
-        VStack {
-            if userChoice != nil {
-                Text("Oponent chose: ")
-                    .font(.largeTitle)
-                
-                HandImage(hand: appChoice)
-            }
-            // MARK: - Results
-            // if let creates a new variable when the value isnt nil
-            if let userChoice {
-                Text(gameResult)
-                    .font(.title)
-                    .foregroundColor(.blue)
-                Text("You chose: ")
-                HandImage(hand: userChoice)
-                Button("Try again"){
-                    self.userChoice = nil
-                    appChoice = Hand.allCases.randomElement()!
+        ZStack {
+            LinearGradient(colors: [.blue, .black], startPoint: .top, endPoint: .bottom)
+                .ignoresSafeArea()
+            
+            VStack (alignment: .center) {
+                Text("Rock, Paper, Scissors!")
+                    .foregroundColor(.white)
+                    .font(.largeTitle.weight(.semibold))
+                   .padding(20)
+                if userChoice == nil {
+                    Image("JankenBoys")
+                        .resizable()
+                        .scaledToFit()
                 }
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
-            } else {
-                // MARK: - User Options
-                Text("Select your choice")
-                
-                HStack {
-                    ForEach(Hand.allCases, id: \.self) { hand in
-                        Button{
-                            playerTapped(buttonChoice: hand)
-                        } label: {
-                            HandImage(hand: hand)
+               Spacer()
+       
+            }
+            
+            VStack {
+                Spacer()
+                if userChoice != nil {
+                    Text("Oponent chose: ")
+                        .font(.largeTitle)
+                    
+                    HandImage(hand: appChoice)
+                }
+                // MARK: - Results
+                // if let creates a new variable when the value isnt nil
+                if let userChoice {
+                    Text(gameResult)
+                        .font(.title)
+                        .foregroundColor(.white)
+                    Text("You chose: ")
+                        .foregroundColor(.white)
+                    HandImage(hand: userChoice)
+                    Button("Try again"){
+                        self.userChoice = nil
+                        appChoice = Hand.allCases.randomElement()!
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.large)
+                } else {
+                    // MARK: - User Options
+                    Text("Select your choice")
+                        .foregroundColor(.white)
+                        .font(.subheadline.weight(.heavy))
+                    HStack {
+                        ForEach(Hand.allCases, id: \.self) { hand in
+                            Button{
+                                playerTapped(buttonChoice: hand)
+                            } label: {
+                                HandImage(hand: hand)
+                            }
                         }
                     }
                 }
+                
+                Text("Your score: \(playerScore)")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding(70)
             }
-            
-            Text("Your score: \(playerScore)")
-                .font(.headline)
+           
         }
+        
     }
     
     func playerTapped(buttonChoice: Hand) {
